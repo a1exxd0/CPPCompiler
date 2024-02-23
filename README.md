@@ -8,9 +8,9 @@ Working features currently:
  - Semicolon handling
 
 # Usage
-To build, run ```system cmake --build .``` from build/ directory.
+To build, run ```cmake --build .``` from build/ directory.
 
-To run from build directory, use ```system ./a++ <filepath>/<filename>.cpp```.
+To run from build directory, use ```./a++ <filepath>/<filename>.cpp```.
 
 # Motivations
  - Learning C++ more in-depth
