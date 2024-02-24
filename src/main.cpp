@@ -105,6 +105,24 @@ std::vector<Token> tokenize(const std::string& input){
     return tokens;
 }
 
+std::string tokens_to_asm(const std::vector<Token>& tokens){
+    std::stringstream asm_code;
+    asm_code << "global _start\n_start:\n";
+    for (int i = 0; i < tokens.size(); i++){
+        const Token& token = tokens.at(i);
+        if(token.type == TokenType::_return){
+            if (i+1 < tokens.size() && tokens.at(i+1).type == TokenType::_int_lit){
+                if (i+2 < tokens.size() && tokens.at(i+2).type == TokenType::semicolon){
+                    asm_code << "   mov rax, 60\n";
+                    asm_code << "   mov rdi, " << tokens.at(i+1).value.value() << "\n";
+                    asm_code << "   syscall\n";
+                }
+            }
+        }
+    }
+    return asm_code.str();
+}
+
 int main(int argc, char* argv[]){
 
     // No input file for compiler
@@ -125,6 +143,19 @@ int main(int argc, char* argv[]){
     for (auto T : res){
         std::cout << TokenTypeToString(T.type) << " " << T.value.value_or("") << std::endl;
     }
+    std::cout << std::endl;
 
+    // Print the assembly code
+    std::cout << tokens_to_asm(res) << std::endl;
+
+    // Write the assembly code to a file
+    {
+        std::fstream file("out.asm", std::ios::out);
+        file << tokens_to_asm(res);
+    }
+
+    // Compile and run the assembly code
+    system("nasm -felf64 out.asm && ld -o out out.o");
+    system("./out && echo $?");
     return EXIT_SUCCESS;
 }

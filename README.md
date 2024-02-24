@@ -6,6 +6,7 @@ Working features currently:
  - Whitespace and newline handling
  - Integer literal storage
  - Semicolon handling
+ - Basic compilation of a return statement to full executable
 
 # Usage
 To build, run ```cmake --build .``` from build/ directory.
